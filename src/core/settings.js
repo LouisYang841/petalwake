@@ -2,8 +2,8 @@
 export const SETTINGS_KEY = 'petalwake.graphics.v2';
 export const LEGACY_SETTINGS_KEY = 'petalwake.graphics.v1';
 export const PRESETS = {
-  'ultra-low': { renderScale: 25, fps: 30, meadow: 'minimal', particles: 0.15, samples: 0, bloom: false, rays: false, blur: false, reflections: false, shadows: false, clouds: false, shore: false, adaptive: true },
-  low: { renderScale: 50, fps: 30, meadow: 'low', particles: 0.3, samples: 0, bloom: false, rays: false, blur: false, reflections: false, shadows: false, clouds: true, shore: false, adaptive: true },
+  'ultra-low': { renderScale: 25, fps: 60, meadow: 'minimal', particles: 0.15, samples: 0, bloom: false, rays: false, blur: false, reflections: false, shadows: false, clouds: false, shore: false, adaptive: true },
+  low: { renderScale: 50, fps: 60, meadow: 'low', particles: 0.3, samples: 0, bloom: false, rays: false, blur: false, reflections: false, shadows: false, clouds: true, shore: false, adaptive: true },
   medium: { renderScale: 75, fps: 60, meadow: 'medium', particles: 0.6, samples: 2, bloom: true, rays: false, blur: false, reflections: true, shadows: true, clouds: true, shore: true, adaptive: true },
   high: { renderScale: 100, fps: 60, meadow: 'high', particles: 1, samples: 4, bloom: true, rays: true, blur: true, reflections: true, shadows: true, clouds: true, shore: true, adaptive: true },
 };
