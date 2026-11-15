@@ -7,6 +7,10 @@
 #settings-panel p { font-size: 14px; line-height: 1.5; opacity: .85; }
 #settings-panel label { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 8px 0; }
 #settings-panel select { max-width: 54%; }
+#settings-panel .render-scale { display: flex; align-items: center; gap: 10px; }
+#settings-panel input[type="range"] { width: min(36vw, 180px); min-height: 44px; margin: 0; accent-color: var(--gold); }
+#settings-panel output { min-width: 4ch; text-align: right; font-variant-numeric: tabular-nums; }
+#settings-panel input:focus-visible { outline: 3px solid var(--gold); }
 #settings-panel footer { text-align: right; }
 #settings-panel button:focus-visible, #settings-panel select:focus-visible, #settings-button:focus-visible { outline: 3px solid var(--gold); }
 .hud-tr { top: 64px; }

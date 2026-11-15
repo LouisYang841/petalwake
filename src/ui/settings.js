@@ -1,7 +1,6 @@
 import { PRESETS, SETTINGS_KEY, sanitizeSettings } from '../core/settings.js';
 
 const fields = [
-  ['dpr', 'Resolution / pixel ratio', [[0.5, '0.5×'], [0.75, '0.75×'], [1, '1×'], [1.25, '1.25×'], [1.5, '1.5×'], [2, '2×']]],
   ['fps', 'Frame limit', [[30, '30 fps'], [45, '45 fps'], [60, '60 fps'], [0, 'Unlimited']]],
   ['meadow', 'Grass and flowers', ['minimal', 'low', 'medium', 'high'].map(v => [v, v])],
   ['particles', 'Particle budget', [[0.15, '15%'], [0.3, '30%'], [0.6, '60%'], [1, '100%']]],
@@ -20,11 +19,20 @@ export function createSettingsUI(game, settings) {
   dialog.innerHTML = `<form method="dialog"><header><h2 id="settings-heading">Graphics settings</h2><button value="cancel" aria-label="Close settings">Close</button></header>
     <p>Lower resolution, meadow density and particle budgets reduce rendering work. Ultra-low also skips clouds and shore decoration.</p>
     <label>Preset <select id="graphics-preset"><option value="custom">Custom</option>${Object.keys(PRESETS).map(key => `<option value="${key}">${key}</option>`).join('')}</select></label>
+    <label>Render scale <span class="render-scale"><input id="render-scale" type="range" min="25" max="100" step="1"><output for="render-scale"></output></span></label>
+    <p>100% uses your screen’s native resolution. 50% uses half the width and height, rendering a quarter as many pixels. Adaptive resolution can lower this further.</p>
     <div id="graphics-fields"></div>
     <p id="settings-message" role="status">Graphics changes restart the game and are saved on this device.</p>
     <footer><button type="button" id="settings-apply">Save & restart</button></footer></form>`;
   document.body.append(button, dialog);
-  const inputs = {};
+  const scale = dialog.querySelector('#render-scale');
+  const scaleValue = dialog.querySelector('output');
+  const inputs = { renderScale: scale };
+  const showScale = () => {
+    scaleValue.value = `${scale.value}%`;
+    scale.setAttribute('aria-valuetext', scaleValue.value);
+  };
+  scale.addEventListener('input', () => { showScale(); preset.value = 'custom'; });
   for (const [key, label, options] of fields) {
     const row = document.createElement('label'); row.textContent = label;
     const select = document.createElement('select');
@@ -37,12 +45,9 @@ export function createSettingsUI(game, settings) {
   const preset = dialog.querySelector('#graphics-preset');
   function fill(value) {
     for (const key in inputs) {
-      // A legacy ?dpr= value may sit between the menu's choices.
-      if (![...inputs[key].options].some(o => o.value === String(value[key]))) {
-        const option = document.createElement('option'); option.value = String(value[key]); option.textContent = `${value[key]}×`; inputs[key].append(option);
-      }
       inputs[key].value = String(value[key]);
     }
+    showScale();
     preset.value = Object.keys(PRESETS).find(name => Object.keys(inputs).every(key => PRESETS[name][key] === value[key])) || 'custom';
   }
   fill(settings);
@@ -71,7 +76,7 @@ export function createSettingsUI(game, settings) {
     if (game.input) game.input.enabled = wasEnabled || game.state === 'play';
   });
   dialog.querySelector('#settings-apply').addEventListener('click', () => {
-    const value = {};
+    const value = { renderScale: Number(scale.value) };
     for (const [key, , options] of fields) {
       const raw = inputs[key].value;
       value[key] = typeof options[0][0] === 'boolean' ? raw === 'true' : typeof options[0][0] === 'number' ? Number(raw) : raw;
@@ -79,7 +84,7 @@ export function createSettingsUI(game, settings) {
     try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(sanitizeSettings(value))); }
     catch { dialog.querySelector('#settings-message').textContent = 'Storage is unavailable. Allow browser storage to save graphics settings.'; return; }
     const url = new URL(location.href);
-    for (const key of ['preset', 'q', 'dpr', 'noscale']) url.searchParams.delete(key);
+    for (const key of ['preset', 'q', 'dpr', 'scale', 'noscale']) url.searchParams.delete(key);
     location.assign(url.href);
   });
 

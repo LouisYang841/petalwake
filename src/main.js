@@ -2,7 +2,7 @@
 import * as THREE from 'three';
 import { U, World, applyEnv } from './core/ctx.js';
 import { Pipeline } from './core/pipeline.js';
-import { loadSettings, frameDue } from './core/settings.js';
+import { loadSettings, frameDue, renderPixelRatio } from './core/settings.js';
 import { createSettingsUI } from './ui/settings.js';
 import { Terrain, makeNoiseTexture } from './world/terrain.js';
 import { Sky } from './world/sky.js';
@@ -32,7 +32,7 @@ const params = new URLSearchParams(location.search);
 let storage;
 try { storage = localStorage; } catch { /* private browsing */ }
 const mobile = matchMedia('(any-pointer: coarse)').matches || navigator.maxTouchPoints > 0;
-const graphics = loadSettings(storage, params, mobile);
+const graphics = loadSettings(storage, params, mobile, window.devicePixelRatio);
 
 const renderer = new THREE.WebGLRenderer({
   canvas, antialias: false, alpha: false, depth: false, stencil: false,
@@ -58,7 +58,6 @@ window.PW = game;
 game.graphics = graphics;
 createSettingsUI(game, graphics);
 
-let maxDpr = graphics.dpr;
 function applyFov() {
   // hold the horizontal field of view on very wide screens instead of letting it balloon
   const baseV = game.fov, hLimit = 122;
@@ -69,7 +68,7 @@ function applyFov() {
 function resize() {
   const w = window.innerWidth, h = window.innerHeight;
   if (!w || !h) return;
-  const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
+  const dpr = renderPixelRatio(graphics.renderScale, window.devicePixelRatio);
   renderer.setPixelRatio(dpr);
   renderer.setSize(w, h, false);
   pipeline.setSize(w, h, dpr);
