@@ -7,8 +7,8 @@ saved locally in the browser. The menu pauses flight and releases held controls.
 
 | Preset | Render scale | Frame limit | Meadow | Particle budget | MSAA | Effects |
 | --- | --- | --- | --- | --- | --- | --- |
-| Ultra-low | 25% | 30 fps | Minimal | 15% | Off | All optional effects off |
-| Low | 50% | 30 fps | Low | 30% | Off | Clouds only |
+| Ultra-low | 25% | 60 fps | Minimal | 15% | Off | All optional effects off |
+| Low | 50% | 60 fps | Low | 30% | Off | Clouds only |
 | Medium | 75% | 60 fps | Medium | 60% | 2× | No motion blur or sun rays |
 | High | 100% | 60 fps | High | 100% | 4× | All effects on |
 

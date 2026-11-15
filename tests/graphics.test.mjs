@@ -20,7 +20,7 @@ test('saved preferences survive; valid URL overrides take precedence without wri
   const storage = { getItem: key => { assert.equal(key, SETTINGS_KEY); return JSON.stringify(PRESETS.medium); } };
   assert.deepEqual(loadSettings(storage), PRESETS.medium);
   const s = loadSettings(storage, new URLSearchParams('preset=ultra-low&q=medium&dpr=0.8&scale=60&noscale'));
-  assert.equal(s.meadow, 'medium'); assert.equal(s.renderScale, 60); assert.equal(s.adaptive, false); assert.equal(s.fps, 30);
+  assert.equal(s.meadow, 'medium'); assert.equal(s.renderScale, 60); assert.equal(s.adaptive, false); assert.equal(s.fps, 60);
   assert.equal(loadSettings(storage, new URLSearchParams('scale=0&q=unknown')).renderScale, 75);
   assert.equal(loadSettings(storage, new URLSearchParams('dpr=0.8'), false, 2).renderScale, 40);
   assert.equal(loadSettings(storage, new URLSearchParams('dpr=-5')).renderScale, 75);
@@ -42,7 +42,7 @@ test('render scale rejects blank output and supersampling values and preserves v
   assert.equal(sanitizeSettings({ renderScale: 63.4 }).renderScale, 63);
 });
 test('legacy pixel-ratio preferences migrate to percentages; v2 preferences take priority', () => {
-  const values = { [LEGACY_SETTINGS_KEY]: JSON.stringify({ ...PRESETS.low, renderScale: undefined, dpr: 1 }) };
+  const values = { [LEGACY_SETTINGS_KEY]: JSON.stringify({ ...PRESETS.low, renderScale: undefined, dpr: 1, fps: 30 }) };
   const storage = { getItem: key => values[key] ?? null };
   const migrated = loadSettings(storage, new URLSearchParams(), true, 2);
   assert.equal(migrated.renderScale, 50); assert.equal(migrated.fps, 30); assert.equal(Object.hasOwn(migrated, 'dpr'), false);
