@@ -2,6 +2,10 @@ Warning: Complete slop. I haven't read a single line of this repo. -Jacob
 
 # Petalwake
 
+Play this fork: **https://LouisYang841.github.io/petalwake/** — includes touchscreen
+controls and saved graphics presets. For weaker devices, try
+[Ultra-low quality](https://LouisYang841.github.io/petalwake/?preset=ultra-low).
+
 *A broom, an island, a good wind.*
 
 Petalwake is a small browser game about flying low and fast over flower meadows, sea cliffs and
@@ -79,6 +83,11 @@ Touch devices get a steering stick, held boost/brake, landing taps, camera,
 kickflip and journal buttons. See [touch controls and device checks](docs/mobile-controls.md).
 
 ## Run it locally
+
+This fork deploys to GitHub Pages through
+[GitHub Actions](https://github.com/LouisYang841/petalwake/actions/workflows/pages.yml)
+on each push to `main`. The workflow runs the controls and graphics tests, packages
+the game files, and publishes them. It can also be started with **Run workflow**.
 
 There is no build step: the page loads ES modules straight from `src/`.
 

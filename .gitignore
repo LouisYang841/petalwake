@@ -10,6 +10,7 @@ art/
 # local only
 .shots/
 .deploy/
+_site/
 .claude/
 .env
 .env.*
