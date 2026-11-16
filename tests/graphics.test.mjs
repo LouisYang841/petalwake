@@ -9,6 +9,10 @@ test('mobile defaults low; desktop defaults high; invalid preset names are ignor
   assert.deepEqual(loadSettings(null), PRESETS.high);
   assert.deepEqual(loadSettings(null, new URLSearchParams('preset=constructor')), PRESETS.high);
   assert.deepEqual(loadSettings(null, new URLSearchParams(), true), PRESETS.low);
+  for (const preset of ['ultra-low', 'low', 'medium', 'high']) {
+    const settings = loadSettings(null, new URLSearchParams({ preset }));
+    assert.equal(settings.renderScale, 100); assert.equal(settings.adaptive, false); assert.equal(settings.fps, 60);
+  }
 });
 test('corrupt, missing and unavailable storage fall back safely', () => {
   for (const getItem of [() => '{', () => 'null', () => { throw Error('blocked'); }]) {
@@ -21,9 +25,9 @@ test('saved preferences survive; valid URL overrides take precedence without wri
   assert.deepEqual(loadSettings(storage), PRESETS.medium);
   const s = loadSettings(storage, new URLSearchParams('preset=ultra-low&q=medium&dpr=0.8&scale=60&noscale'));
   assert.equal(s.meadow, 'medium'); assert.equal(s.renderScale, 60); assert.equal(s.adaptive, false); assert.equal(s.fps, 60);
-  assert.equal(loadSettings(storage, new URLSearchParams('scale=0&q=unknown')).renderScale, 75);
+  assert.equal(loadSettings(storage, new URLSearchParams('scale=0&q=unknown')).renderScale, 100);
   assert.equal(loadSettings(storage, new URLSearchParams('dpr=0.8'), false, 2).renderScale, 40);
-  assert.equal(loadSettings(storage, new URLSearchParams('dpr=-5')).renderScale, 75);
+  assert.equal(loadSettings(storage, new URLSearchParams('dpr=-5')).renderScale, 100);
 });
 test('render scale is relative to native resolution on standard and high-DPI displays', () => {
   for (const dpr of [1, 1.5, 2, 3, 4]) {
@@ -67,7 +71,7 @@ function renderer() {
 }
 test('ultra-low removes bloom/ray targets and rendering passes, retains depth composition', () => {
   const r = renderer(), low = new Pipeline(r, PRESETS['ultra-low']); low.setSize(800, 600, renderPixelRatio(PRESETS['ultra-low'].renderScale, 3));
-  assert.equal(low.sceneRT.width, 600); assert.equal(low.sceneRT.samples, 0); assert.equal(low.compRT.samples, 0);
+  assert.equal(low.sceneRT.width, 2400); assert.equal(low.sceneRT.samples, 0); assert.equal(low.compRT.samples, 0);
   assert.equal(low.bloom.length, 0); assert.equal(low.bloomUp.length, 0); assert.equal(low.raysRT, null);
   assert.equal(low.params.blur, 0); assert.equal(low.blurMat.depthWrite, true); assert.ok(low.uDepth.value);
   low.render(new THREE.Scene(), new THREE.PerspectiveCamera(), 1 / 30);
@@ -76,7 +80,7 @@ test('ultra-low removes bloom/ray targets and rendering passes, retains depth co
   const highRenderer = renderer(), high = new Pipeline(highRenderer, PRESETS.high); high.setSize(800, 600, renderPixelRatio(PRESETS.high.renderScale, 3));
   high.render(new THREE.Scene(), new THREE.PerspectiveCamera(), 1 / 60);
   assert.ok(highRenderer.calls > 10); assert.equal(high.sceneRT.samples, 4);
-  assert.ok(high.sceneRT.width * high.sceneRT.height > low.sceneRT.width * low.sceneRT.height);
+  assert.equal(high.sceneRT.width * high.sceneRT.height, low.sceneRT.width * low.sceneRT.height);
   low.dispose(); high.dispose();
 });
 test('MSAA respects the device sample limit and particle budgets reduce allocations', () => {

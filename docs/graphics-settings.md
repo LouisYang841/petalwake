@@ -7,12 +7,13 @@ saved locally in the browser. The menu pauses flight and releases held controls.
 
 | Preset | Render scale | Frame limit | Meadow | Particle budget | MSAA | Effects |
 | --- | --- | --- | --- | --- | --- | --- |
-| Ultra-low | 25% | 60 fps | Minimal | 15% | Off | All optional effects off |
-| Low | 50% | 60 fps | Low | 30% | Off | Clouds only |
-| Medium | 75% | 60 fps | Medium | 60% | 2× | No motion blur or sun rays |
+| Ultra-low | 100% | 60 fps | Minimal | 15% | Off | All optional effects off |
+| Low | 100% | 60 fps | Low | 30% | Off | Clouds only |
+| Medium | 100% | 60 fps | Medium | 60% | 2× | No motion blur or sun rays |
 | High | 100% | 60 fps | High | 100% | 4× | All effects on |
 
 Touch devices default to Low on their first visit. Desktop defaults to High.
+All presets default to 100% render scale, 60 fps and adaptive resolution off.
 The **Render scale** slider covers 25–100% in 1% steps. At 100%, rendering uses
 the screen's native pixel dimensions. At 50%, width and height are each halved,
 so only 25% as many pixels are rendered. For example, a 1080 × 2400 display
