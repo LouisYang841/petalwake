@@ -1,4 +1,5 @@
 // Pointer capture keeps independent steering and action fingers alive outside their buttons.
+import { t } from './i18n.js';
 export class TouchControls {
   constructor(input, game) {
     this.input = input; this.game = game;
@@ -7,9 +8,9 @@ export class TouchControls {
     this.coarse = matchMedia('(any-pointer: coarse)');
     const root = this.root = document.createElement('div');
     root.id = 'touch-controls'; root.hidden = true;
-    root.innerHTML = `<div class="touch-stick" role="group" aria-label="Drag to bank, up to climb, down to dive"><span class="touch-knob"></span><small>steer</small></div>
-      <div class="touch-actions"><button data-hold="boost">Boost</button><button data-hold="brake">Brake<br><small>2× land</small></button></div>
-      <div class="touch-tools"><button data-code="KeyC">Camera</button><button data-code="KeyQ">Flip</button><button data-journal>Journal</button></div>`;
+    root.innerHTML = `<div class="touch-stick" role="group" aria-label="${t('Drag to bank, up to climb, down to dive')}"><span class="touch-knob"></span><small>${t('steer')}</small></div>
+      <div class="touch-actions"><button data-hold="boost">${t('Boost')}</button><button data-hold="brake">${t('Brake')}<br><small>${t('2× land')}</small></button></div>
+      <div class="touch-tools"><button data-code="KeyC">${t('Camera')}</button><button data-code="KeyQ">${t('Flip')}</button><button data-journal>${t('Journal')}</button></div>`;
     document.body.append(root);
     this.stick = root.querySelector('.touch-stick');
     this.knob = root.querySelector('.touch-knob');

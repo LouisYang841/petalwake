@@ -6,6 +6,14 @@ Play this fork: **https://LouisYang841.github.io/petalwake/** — includes touch
 controls and saved graphics presets. For weaker devices, try
 [Ultra-low quality](https://LouisYang841.github.io/petalwake/?preset=ultra-low).
 
+本 fork 自带简体中文界面，默认中文：标题页底部有「中文 / English」切换按钮，游戏内的
+设置面板里也能切换（选择后页面会重新加载），选择记在浏览器本地；加 `?lang=en` 可直接
+用英文打开一次。游戏里的地名、塔名、宝藏与手记正文都已翻译。
+
+The interface is Simplified Chinese by default. Switch with the 中文 / English buttons under the
+title screen, or in the in-game settings panel (the page reloads); the choice is remembered. Add
+`?lang=en` to a link to open it in English once.
+
 *A broom, an island, a good wind.*
 
 Petalwake is a small browser game about flying low and fast over flower meadows, sea cliffs and

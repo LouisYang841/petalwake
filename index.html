@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -21,20 +21,20 @@
 <div id="hud" hidden>
   <div class="hud-tl">
     <div class="seeds"><span class="seeds-icon"></span><span id="seedCount">0</span><span class="seeds-of">/ <span id="seedTotal">0</span></span>
-      <span class="compass" id="compass" title="nearest wind seed"><svg viewBox="-12 -12 24 24" width="22" height="22"><path d="M0 -9 L5 6 L0 3 L-5 6 Z" fill="currentColor"/></svg><span id="seedDist"></span></span>
+      <span class="compass" id="compass" data-i18n-title="nearest wind seed" title="最近的风之种"><svg viewBox="-12 -12 24 24" width="22" height="22"><path d="M0 -9 L5 6 L0 3 L-5 6 Z" fill="currentColor"/></svg><span id="seedDist"></span></span>
     </div>
     <div class="place" id="place"></div>
   </div>
   <div class="hud-bl">
     <div class="gust"><div class="gust-fill" id="gustFill"></div></div>
-    <div class="gust-label">gust</div>
-    <div class="trick" id="trick" hidden><kbd>Q</kbd>kickflip</div>
+    <div class="gust-label" data-i18n="gust">风势</div>
+    <div class="trick" id="trick" hidden><kbd>Q</kbd><span data-i18n="kickflip">翻板</span></div>
   </div>
   <div class="hud-br"><span id="speed">0</span><small>km/h</small></div>
   <div class="hud-tr" id="job" hidden>
-    <div class="job-kicker"><span class="job-icon"></span>parcel for</div>
+    <div class="job-kicker"><span class="job-icon"></span><span data-i18n="parcel for">包裹送往</span></div>
     <div class="job-name"><span id="jobName"></span><span class="job-spot" id="jobSpot"></span></div>
-    <div class="job-meta"><span class="compass" id="jobCompass" title="where the parcel is going"><svg viewBox="-12 -12 24 24" width="22" height="22"><path d="M0 -9 L5 6 L0 3 L-5 6 Z" fill="currentColor"/></svg><span id="jobDist"></span></span><span class="job-count"><span id="jobCount">0</span> delivered</span></div>
+    <div class="job-meta"><span class="compass" id="jobCompass" data-i18n-title="where the parcel is going" title="包裹要送去的地方"><svg viewBox="-12 -12 24 24" width="22" height="22"><path d="M0 -9 L5 6 L0 3 L-5 6 Z" fill="currentColor"/></svg><span id="jobDist"></span></span><span class="job-count"><span id="jobCount">0</span> <span data-i18n="delivered">已送达</span></span></div>
   </div>
   <div class="prompt" id="prompt"></div>
   <div class="card" id="card"><div class="card-kicker" id="cardKicker"></div><div class="card-name" id="cardName"></div><div class="card-sub" id="cardSub"></div></div>
@@ -43,19 +43,19 @@
 
 <div id="title">
   <div class="title-inner">
-    <p class="kicker">a broom, an island, a good wind</p>
+    <p class="kicker" data-i18n="a broom, an island, a good wind">一把扫帚，一座岛，一阵好风</p>
     <h1>Petalwake</h1>
     <div class="bar"><div class="bar-fill" id="loadFill"></div></div>
-    <p class="status" id="loadStatus">gathering the wind…</p>
-    <button id="start" hidden>Take off</button>
-    <p class="touch-help">Drag the left stick to steer. Hold Boost or Brake.<br>Double-tap Brake to land; tap once to take off.</p>
+    <p class="status" id="loadStatus" data-i18n="gathering the wind…">正在聚拢风……</p>
+    <button id="start" hidden data-i18n="Take off">起飞</button>
+    <p class="touch-help"><span data-i18n="Drag the left stick to steer. Hold Boost or Brake.">拖动左侧摇杆控制方向，按住加速或刹车。</span><br><span data-i18n="Double-tap Brake to land; tap once to take off.">双击刹车降落；单点刹车起飞。</span></p>
     <div class="keys" id="keys" hidden>
-      <div><kbd>W</kbd><kbd>S</kbd> dive · climb</div>
-      <div><kbd>A</kbd><kbd>D</kbd> bank</div>
-      <div><kbd>Shift</kbd> ride the gust</div>
-      <div><kbd>Space</kbd> ease up</div>
-      <div><kbd>Mouse</kbd> steer · <kbd>C</kbd> camera · <kbd>I</kbd> invert pitch</div>
-      <div><kbd>P</kbd> hide HUD · <kbd>M</kbd> mute · <kbd>J</kbd> journal</div>
+      <div><kbd>W</kbd><kbd>S</kbd> <span data-i18n="dive · climb">俯冲 · 爬升</span></div>
+      <div><kbd>A</kbd><kbd>D</kbd> <span data-i18n="bank">侧倾</span></div>
+      <div><kbd>Shift</kbd> <span data-i18n="ride the gust">乘风</span></div>
+      <div><kbd>Space</kbd> <span data-i18n="ease up">收力</span></div>
+      <div><kbd>Mouse</kbd> <span data-i18n="steer">转向</span> · <kbd>C</kbd> <span data-i18n="camera">视角</span> · <kbd>I</kbd> <span data-i18n="invert pitch">反转俯仰</span></div>
+      <div><kbd>P</kbd> <span data-i18n="hide HUD">隐藏界面</span> · <kbd>M</kbd> <span data-i18n="mute">静音</span> · <kbd>J</kbd> <span data-i18n="journal">手记</span></div>
     </div>
   </div>
 </div>

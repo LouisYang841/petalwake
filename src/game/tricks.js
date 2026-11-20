@@ -3,6 +3,7 @@
 // stays level and the cushion under the broom never knows - plus a spiral of sparks and petals
 // thrown off the turning broom, a rush of air, and a little gust for the nerve of it.
 import { mote, streak, GOLD, PETAL, PALE } from './sparks.js';
+import { t } from '../ui/i18n.js';
 
 export const FLIP = {
   SEEDS: 10,        // wind seeds to catch before the trick is hers
@@ -58,7 +59,7 @@ export class Kickflip {
     if (this.unlocked || !g.seeds || g.seeds.count < FLIP.SEEDS) return;
     this.unlocked = true;
     this.store.set('kickflip.v1', true);
-    g.toast?.('Kickflip unlocked: press Q');
+    g.toast?.(t('Kickflip unlocked: press Q'));
     g.sound?.unlock?.();
   }
 

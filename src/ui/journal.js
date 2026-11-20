@@ -1,6 +1,7 @@
 // The journal: a treasure counter in the HUD, a card when something is found, and a page (J) that
 // lists what has been found with its lore, and what has not as a hint of where to look.
 // Builds its own DOM so the page only needs the stylesheet (src/ui/journal.css).
+import { t, tn } from './i18n.js';
 
 const el = (tag, cls, html) => {
   const e = document.createElement(tag);
@@ -25,11 +26,11 @@ export class Journal {
     this.counter.hidden = places.total === 0;
 
     // ---- the card shown when a treasure is taken
-    this.card = el('div', 'treasure-card', '<p class="tc-kicker">treasure found</p><h2 class="tc-name"></h2><p class="tc-lore"></p><p class="tc-place"></p>');
+    this.card = el('div', 'treasure-card', `<p class="tc-kicker">${t('treasure found')}</p><h2 class="tc-name"></h2><p class="tc-lore"></p><p class="tc-place"></p>`);
     document.body.appendChild(this.card);
 
     // ---- the journal page
-    this.page = el('div', 'journal', '<div class="journal-inner"><header><p class="j-kicker">the rider\'s journal</p><h2>Treasures of the island</h2><p class="j-sum"></p></header><div class="j-list"></div><footer><kbd>J</kbd> close</footer></div>');
+    this.page = el('div', 'journal', `<div class="journal-inner"><header><p class="j-kicker">${t("the rider's journal")}</p><h2>${t('Treasures of the island')}</h2><p class="j-sum"></p></header><div class="j-list"></div><footer><kbd>J</kbd> ${t('close')}</footer></div>`);
     this.page.hidden = true;
     document.body.appendChild(this.page);
     this.page.addEventListener('click', () => this.toggle(false));
@@ -52,21 +53,21 @@ export class Journal {
   refresh() {
     const n = this.places.count, total = this.places.total;
     this.counter.querySelector('.treasures-n').textContent = n;
-    this.counter.querySelector('.treasures-of').textContent = `/ ${total} treasures`;
-    this.counter.title = `Treasures ${n}/${total}`;
+    this.counter.querySelector('.treasures-of').textContent = t('/ {total} treasures', { total });
+    this.counter.title = t('Treasures {n}/{total}', { n, total });
     if (this.open) this._fill();
   }
 
   _fill() {
     const list = this.page.querySelector('.j-list');
     const n = this.places.count, total = this.places.total;
-    this.page.querySelector('.j-sum').textContent = n === total ? `all ${total} found` : `${n} of ${total} found`;
+    this.page.querySelector('.j-sum').textContent = n === total ? t('all {total} found', { total }) : t('{n} of {total} found', { n, total });
     list.innerHTML = this.places.list.filter((p) => p.treasure).map((p) => {
-      const t = p.treasure;
-      if (t.found) {
-        return `<article class="j-entry found" style="--tint:${css(t.tint)}"><span class="j-gem"></span><div><h3>${esc(t.def.name)}</h3><p class="j-where">${esc(p.def.name)}</p><p class="j-lore">${esc(t.def.lore)}</p></div></article>`;
+      const tr = p.treasure;
+      if (tr.found) {
+        return `<article class="j-entry found" style="--tint:${css(tr.tint)}"><span class="j-gem"></span><div><h3>${esc(tn(tr.def.name))}</h3><p class="j-where">${esc(tn(p.def.name))}</p><p class="j-lore">${esc(tn(tr.def.lore))}</p></div></article>`;
       }
-      return `<article class="j-entry"><span class="j-gem"></span><div><h3>${p.visited ? esc(p.def.name) : 'Not yet found'}</h3><p class="j-lore">${esc(p.def.hint || 'Somewhere on the island.')}</p></div></article>`;
+      return `<article class="j-entry"><span class="j-gem"></span><div><h3>${p.visited ? esc(tn(p.def.name)) : esc(t('Not yet found'))}</h3><p class="j-lore">${esc(t(p.def.hint || 'Somewhere on the island.'))}</p></div></article>`;
     }).join('');
   }
 
@@ -89,22 +90,22 @@ export class Journal {
 
   /** The rider has come into a place for the first time this flight. */
   arrive(pl) {
-    this.game.toast?.(pl.def.name);
+    this.game.toast?.(tn(pl.def.name));
   }
 
   found(pl) {
-    const t = pl.treasure;
-    this.card.querySelector('.tc-name').textContent = t.def.name;
-    this.card.querySelector('.tc-lore').textContent = t.def.lore || '';
-    this.card.querySelector('.tc-place').textContent = pl.def.name || '';
-    this.card.style.setProperty('--tint', css(t.tint));
+    const tr = pl.treasure;
+    this.card.querySelector('.tc-name').textContent = tn(tr.def.name);
+    this.card.querySelector('.tc-lore').textContent = tn(tr.def.lore || '');
+    this.card.querySelector('.tc-place').textContent = tn(pl.def.name || '');
+    this.card.style.setProperty('--tint', css(tr.tint));
     this.card.classList.add('show');
     this.cardT = 8;
     this.refresh();
     this.counter.classList.remove('bump');
     void this.counter.offsetWidth;
     this.counter.classList.add('bump');
-    if (this.places.count === this.places.total) setTimeout(() => this.game.toast?.('every treasure found — the island has no secrets left'), 8600);
+    if (this.places.count === this.places.total) setTimeout(() => this.game.toast?.(t('every treasure found — the island has no secrets left')), 8600);
   }
 
   update(dt) {

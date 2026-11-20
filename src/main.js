@@ -25,6 +25,10 @@ import { Places } from './world/places.js';
 import { Sound } from './audio/audio.js';
 import { Gameplay } from './game/index.js';
 import { TouchControls } from './ui/touch.js';
+import { applyStatic, mountLangToggle, t } from './ui/i18n.js';
+
+applyStatic();
+mountLangToggle();
 
 const $ = (id) => document.getElementById(id);
 const canvas = $('view');
@@ -101,7 +105,7 @@ async function boot() {
   U.uTownMask0.value = blank;
   U.uTownMask1.value = blank;
 
-  setLoad(0.08, 'raising the island…');
+  setLoad(0.08, t('raising the island…'));
   const riderLoad = Rider.load(renderer);
   const propsLoad = Props.load();
   const townLoad = Town.load(renderer);
@@ -110,7 +114,7 @@ async function boot() {
   world.add(terrain.mainView.mesh);
   await tick();
 
-  setLoad(0.4, 'sowing the meadows…');
+  setLoad(0.4, t('sowing the meadows…'));
   const meadow = (game.meadow = new Meadow(terrain, graphics.meadow));
   world.add(meadow.group);
 
@@ -120,7 +124,7 @@ async function boot() {
     const clouds = (game.clouds = new CloudBaker(renderer));
     clouds.begin();
     while (!clouds.done) {
-      setLoad(0.45 + 0.4 * clouds.step(2), 'painting the sky…');
+      setLoad(0.45 + 0.4 * clouds.step(2), t('painting the sky…'));
       await tick();
     }
     sky.cloudTex.value = clouds.texture;
@@ -146,7 +150,7 @@ async function boot() {
   world.add(places.group);
   pipeline.overlay.add(places.overlay);
 
-  setLoad(0.9, 'waking the broom…');
+  setLoad(0.9, t('waking the broom…'));
   const rider = (game.rider = await riderLoad);
   pipeline.overlay.add(rider.group, rider.lights);
   pipeline.overlay.environment = sky.bakeEnvironment(renderer);
@@ -321,9 +325,9 @@ function advance(dt, ctl) {
     fx.burst(got.x, got.y, got.z, 90, _sp[1], 0.3 + 0.7 * rider.sunVis, 9);
     flight.gust = Math.min(1, flight.gust + 0.4);
     $('seedCount').textContent = n;
-    if (n === total) toast('every seed caught — the whole island is on the wind');
-    else if (n === 1) toast('a wind seed — there are more out there');
-    else if (n % 6 === 0) toast(`${total - n} seeds still adrift`);
+    if (n === total) toast(t('every seed caught — the whole island is on the wind'));
+    else if (n === 1) toast(t('a wind seed — there are more out there'));
+    else if (n % 6 === 0) toast(t('{n} seeds still adrift', { n: total - n }));
   }
   game.places.update(dt, flight, t);
   game.town.ambient(dt, fx, camera);
@@ -340,10 +344,10 @@ function step(dt) {
   const { input, chase } = game;
   input.update(dt);
   if (game.state === 'play') {
-    if (input.take('KeyC')) toast(`camera · ${chase.next()}`);
-    if (input.take('KeyI')) { input.invert = !input.invert; toast(input.invert ? 'pitch inverted' : 'pitch normal'); }
+    if (input.take('KeyC')) toast(t('camera · {mode}', { mode: t(chase.next()) }));
+    if (input.take('KeyI')) { input.invert = !input.invert; toast(t(input.invert ? 'pitch inverted' : 'pitch normal')); }
     if (input.take('KeyP')) $('hud').classList.toggle('quiet');
-    if (input.take('KeyM')) toast(game.sound.toggleMute() ? 'sound off' : 'sound on');
+    if (input.take('KeyM')) toast(t(game.sound.toggleMute() ? 'sound off' : 'sound on'));
   }
   advance(dt, game.override || (game.state === 'play' ? input : autopilot()));
   applyFov();
@@ -442,7 +446,7 @@ function hud(dt) {
       placeShown = placeNow;
       const el = $('place');
       el.classList.remove('show');
-      setTimeout(() => { el.textContent = placeShown; el.classList.add('show'); }, 350);
+      setTimeout(() => { el.textContent = t(placeShown); el.classList.add('show'); }, 350);
     }
   }
 }
@@ -519,5 +523,5 @@ game.shot = async (name = 'shot', w = 1920, h = 1080, steps = 2, dt = 1 / 60) =>
 
 boot().catch((e) => {
   console.error(e);
-  $('loadStatus').textContent = `failed to load: ${e.message}`;
+  $('loadStatus').textContent = t('failed to load: {msg}', { msg: e.message });
 });

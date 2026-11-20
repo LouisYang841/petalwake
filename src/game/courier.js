@@ -4,6 +4,7 @@
 // Any other pad is a rest stop. The count is kept between visits.
 import { twinkle, GOLD, PETAL } from './sparks.js';
 import { far } from './hud.js';
+import { t } from '../ui/i18n.js';
 
 export const COURIER = {
   GOOD: 350,        // m: a "good flight" to another place. Nearer pads are passed over while there are farther ones
@@ -67,8 +68,8 @@ export class Courier {
     if (pad !== this.target) {
       // a rest stop: a breather for the broom, and a reminder of where she is bound
       f.gust = Math.min(1, f.gust + COURIER.REST_GUST);
-      const t = this.target;
-      this.hud.card('rest stop', pad.name, t ? `the parcel is for ${t.name} · ${far(Math.hypot(t.pos.x - pad.pos.x, t.pos.z - pad.pos.z))}` : '', 3.4);
+      const care = this.target;
+      this.hud.card('rest stop', pad.name, care ? t('the parcel is for {name} · {dist}', { name: t(care.name), dist: far(Math.hypot(care.pos.x - pad.pos.x, care.pos.z - pad.pos.z)) }) : '', 3.4);
       return false;
     }
     this.count++;
@@ -84,10 +85,10 @@ export class Courier {
     const prev = this.last;
     this.last = pad;
     this.target = this._pick(pad, pad.pos, prev);
-    const t = this.target;
-    this.hud.card('delivered', pad.name, t && t !== pad
-      ? `parcel no. ${this.count} · the next is for ${t.name}, ${far(Math.hypot(t.pos.x - pad.pos.x, t.pos.z - pad.pos.z))} off`
-      : `parcel no. ${this.count}`, 4.6);
+    const next = this.target;
+    this.hud.card('delivered', pad.name, next && next !== pad
+      ? t('parcel no. {n} · the next is for {name}, {dist} off', { n: this.count, name: t(next.name), dist: far(Math.hypot(next.pos.x - pad.pos.x, next.pos.z - pad.pos.z)) })
+      : t('parcel no. {n}', { n: this.count }), 4.6);
     this._show();
     return true;
   }

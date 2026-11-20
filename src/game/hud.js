@@ -1,6 +1,8 @@
 // The errand's corner of the HUD: where the parcel is going (top right, in the manner of the seed
 // compass), the landing prompt, the card that comes up when a parcel is delivered, and the badge
 // for the trick. The elements live in index.html; a missing one is simply skipped.
+import { t } from '../ui/i18n.js';
+
 const $ = (id) => document.getElementById(id);
 
 export const far = (m) => (m < 995 ? `${Math.max(10, Math.round(m / 10) * 10)} m` : `${(m / 1000).toFixed(1)} km`);
@@ -24,8 +26,8 @@ export class Hud {
     if (!e.job) return;
     e.job.hidden = !name;
     if (!name) return;
-    e.jobName.textContent = name;
-    if (e.jobSpot) e.jobSpot.textContent = spot ? ` · ${spot}` : '';
+    e.jobName.textContent = t(name);
+    if (e.jobSpot) e.jobSpot.textContent = spot ? ` · ${t(spot)}` : '';
     if (e.jobCount) e.jobCount.textContent = count;
     // a little flourish when it changes
     e.job.classList.remove('fresh');
@@ -48,7 +50,7 @@ export class Hud {
     this._prompt = html;
     if (html) {
       e.innerHTML = document.body.classList.contains('touch-layout')
-        ? html.replaceAll('<kbd>Space</kbd>', '<kbd>Brake</kbd>').replaceAll('<kbd>Q</kbd>', '<kbd>Flip</kbd>') : html;
+        ? html.replaceAll('<kbd>Space</kbd>', `<kbd>${t('Brake')}</kbd>`).replaceAll('<kbd>Q</kbd>', `<kbd>${t('Flip')}</kbd>`) : html;
       e.classList.add('show');
     } else e.classList.remove('show');
   }
@@ -87,8 +89,8 @@ export class Hud {
     }
     const c = this._queue.shift();
     if (!c) return;
-    e.cardKicker.textContent = c.kicker;
-    e.cardName.textContent = c.name;
+    e.cardKicker.textContent = t(c.kicker);
+    e.cardName.textContent = t(c.name);
     e.cardSub.textContent = c.sub;
     e.card.classList.add('show');
     this._cardT = c.seconds + 0.9;
